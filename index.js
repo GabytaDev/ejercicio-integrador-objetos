@@ -36,16 +36,59 @@ const btnCambiarDatos = document.querySelector("#btn-cambiar-datos")
 const btnCerrarSesion = document.querySelector("#btn-cerrar-sesion")
 const btnEnviarNuevosDatos = document.querySelector("#boton-enviar-nuevos-datos")
 
+/***** FUNCIONES AUXILIARES ******/
+
+const modificarNombreDeUsuario = (usuario, nuevoNombre) => {
+
+    return usuario.nombreUsuario = nuevoNombre
+}
+
+
+/*convierto el objeto usuario a JSON , retornar el 
+ objeto convertido a JSON.*/
+
+ const convertirAJSON = (usuario) => {
+    let objetoJSON = JSON.stringify(usuario)
+    return objetoJSON
+}
+console.log(convertirAJSON(usuario))
+
+/* tomo la cadena JSON y la convierto en objeto de JS*/
+
+const convertirDesdeJSON = (json) => {
+    const JSONconvertidoaObjeto = JSON.parse(json)
+    return JSONconvertidoaObjeto //retorna un nuevo Objeto de javascript
+}
+
+const guardarEnLocalStorage = (objetoDejs,clave) => {
+    let objetoConvertido = convertirAJSON(objetoDejs)
+    localStorage.setItem(clave, objetoConvertido) //se usa para guardar la sesion
+}
+//guardarEnLocalStorage (objetoConvertido,"usuario") //ejecutar en btn enviar nuevos datos: guardarEnLocalStorage( { sesionEstaIniciada: true }, "sesion" )
+/*recibe como parámetro un string clave y retorne un objeto de Javascript con los
+// datos guardados bajo esa clave en localStorage.*/
+
+const obtenerDesdeLocalStorage = (clave) => {
+    const json = localStorage.getItem(clave)
+    const objeto = convertirDesdeJSON(json)
+    return objeto 
+}
+
 botonIniciarSesion.onclick = () => {
     formulario.classList.remove("ocultar")
 }
 
+/**** VARIABLES DE ESTADO *****/
 let  sesionIniciada = false
 
 const usuario = {
   nombreUsuario: "gaby",
   contrasenia: "123", 
 }
+
+/**** CODIGO DE LA APLICACION ****/
+
+const sesionEstaIniciadaLocalS = obtenerDesdeLocalStorage("sesion")
 
 btnEnviarForm.onclick = () => {
     if (inputUser.value === usuario.nombreUsuario && inputPassword.value === usuario.contrasenia) { 
@@ -89,35 +132,5 @@ btnEnviarNuevosDatos.onclick = () => {
 
 }
 
-/*convierto el objeto usuario a JSON , retornar el 
- objeto convertido a JSON.*/
 
-const convertirAJSON = (usuario) => {
-    let objetoJSON = JSON.stringify(usuario)
-    return objetoJSON
-}
-console.log(convertirAJSON(usuario))
-
-/* tomo la cadena JSON y la convierto en objeto de JS*/
-
-const convertirDesdeJSON = (json) => {
-    const JSONconvertidoaObjeto = JSON.parse(json)
-    return JSONconvertidoaObjeto //retorna un nuevo Objeto de javascript
-}
-
-const guardarEnLocalStorage = (objetoDejs,clave) => {
-    let objetoConvertido = convertirAJSON(objetoDejs)
-    localStorage.setItem(clave, objetoConvertido) //se usa para guardar la sesion
-}
-//guardarEnLocalStorage (objetoConvertido,"usuario") //ejecutar en btn enviar nuevos datos: guardarEnLocalStorage( { sesionEstaIniciada: true }, "sesion" )
-/*recibe como parámetro un string clave y retorne un objeto de Javascript con los
-// datos guardados bajo esa clave en localStorage.*/
-
-const obtenerDesdeLocalStorage = (clave) => {
-    const json = localStorage.getItem(clave)
-    const objeto = convertirDesdeJSON(json)
-    return objeto 
-}
-
-const sesionEstaIniciadaLocalS = obtenerDesdeLocalStorage("sesion")
 
