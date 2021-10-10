@@ -35,7 +35,13 @@ const contenedorSesionIniciada = document.querySelector("#contenedor-sesion-inic
 const btnCambiarDatos = document.querySelector("#btn-cambiar-datos")
 const btnCerrarSesion = document.querySelector("#btn-cerrar-sesion")
 const btnEnviarNuevosDatos = document.querySelector("#boton-enviar-nuevos-datos")
+/**** VARIABLES DE ESTADO *****/
+let  sesionIniciada = false
 
+const usuario = {
+  nombreUsuario: "gaby",
+  contrasenia: "123", 
+}
 /***** FUNCIONES AUXILIARES ******/
 
 const modificarNombreDeUsuario = (usuario, nuevoNombre) => {
@@ -44,17 +50,28 @@ const modificarNombreDeUsuario = (usuario, nuevoNombre) => {
 }
 
 
-/*convierto el objeto usuario a JSON , retornar el 
- objeto convertido a JSON.*/
-
- const convertirAJSON = (usuario) => {
+/*convierto el objeto usuario a JSON , retorna el objeto convertido a JSON.*/
+const convertirAJSON = (usuario) => {
     let objetoJSON = JSON.stringify(usuario)
     return objetoJSON
 }
-console.log(convertirAJSON(usuario))
+
+const usuarioConvertidoaJSON = convertirAJSON(usuario) //lo guardo en una variable
+console.log(usuarioConvertidoaJSON)
+
+// guardo la info en local storage
+localStorage.setItem('usuario', usuarioConvertidoaJSON)//guardo el usuario
+
+// obtengo info de local storage
+const infoGuardada = localStorage.getItem('usuario')//obtengo desde localStorage
+console.log(infoGuardada)
+
+// convertir de JSON a Javascript los datos del usuario
+const infoGuardadaEnJS = JSON.parse(infoGuardada)
+console.log(infoGuardadaEnJS)
+
 
 /* tomo la cadena JSON y la convierto en objeto de JS*/
-
 const convertirDesdeJSON = (json) => {
     const JSONconvertidoaObjeto = JSON.parse(json)
     return JSONconvertidoaObjeto //retorna un nuevo Objeto de javascript
@@ -64,8 +81,8 @@ const guardarEnLocalStorage = (objetoDejs,clave) => {
     let objetoConvertido = convertirAJSON(objetoDejs)
     localStorage.setItem(clave, objetoConvertido) //se usa para guardar la sesion
 }
-//guardarEnLocalStorage (objetoConvertido,"usuario") //ejecutar en btn enviar nuevos datos: guardarEnLocalStorage( { sesionEstaIniciada: true }, "sesion" )
-/*recibe como parámetro un string clave y retorne un objeto de Javascript con los
+
+/*recibe como parámetro un string clave y retorna un objeto de Javascript con los
 // datos guardados bajo esa clave en localStorage.*/
 
 const obtenerDesdeLocalStorage = (clave) => {
@@ -74,31 +91,25 @@ const obtenerDesdeLocalStorage = (clave) => {
     return objeto 
 }
 
+/**** CODIGO DE LA APLICACION ****/
+
 botonIniciarSesion.onclick = () => {
     formulario.classList.remove("ocultar")
 }
 
-/**** VARIABLES DE ESTADO *****/
-let  sesionIniciada = false
-
-const usuario = {
-  nombreUsuario: "gaby",
-  contrasenia: "123", 
-}
-
-/**** CODIGO DE LA APLICACION ****/
-
 const sesionEstaIniciadaLocalS = obtenerDesdeLocalStorage("sesion")
+const nombreUsuarioLocalS = obtenerDesdeLocalStorage("usuario")
 
 btnEnviarForm.onclick = () => {
     if (inputUser.value === usuario.nombreUsuario && inputPassword.value === usuario.contrasenia) { 
+        sesionIniciada = true
         botonIniciarSesion.classList.add("ocultar")
         btnCambiarDatos.classList.remove("ocultar")
         btnCerrarSesion.classList.remove("ocultar")
         formulario.classList.add("ocultar")
-        titulo.textContent = `Hola, ${usuario.nombreUsuario}!!`
         contenedorSesionIniciada.classList.remove("ocultar")
         guardarEnLocalStorage ({sesionIniciada:true}, "sesion")//funciona!!
+        titulo.textContent = `Hola, ${usuario.nombreUsuario}!!` //debe tomar el nombre desde el localStorage
     }else{
         alert("ingresaste datos erroneos")
     }
@@ -109,6 +120,7 @@ btnEnviarForm.onclick = () => {
 "Iniciar sesión" debe volver a ser visible.*/
 
 btnCerrarSesion.onclick = () => {
+    sesionIniciada = false
     titulo.textContent = "Hola!"
     botonIniciarSesion.classList.remove("ocultar")
     contenedorSesionIniciada.classList.add("ocultar")
@@ -128,7 +140,7 @@ btnCambiarDatos.onclick = ()=> {
 btnEnviarNuevosDatos.onclick = () => {
     usuario.nombreUsuario = inputUser.value
     usuario.contrasenia = inputPassword.value
-    titulo.textContent = `Hola, ${usuario.nombreUsuario}!!`
+    titulo.textContent = `Hola, ${usuario.nombreUsuario}!!` //Debe tomar el nombre del localStorage
 
 }
 
