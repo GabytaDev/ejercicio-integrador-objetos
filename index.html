@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio integrador </title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <h1>Hola!</h1>
+        
+        <button id="boton-iniciar-sesion">Iniciar Sesión</button>
+
+        <section">
+            <form class="ocultar formulario">
+
+                <label for="usuario">Usuario
+                    <input type="text" name="" id="input-user">
+                </label>
+               
+                <label for="contrasenia">Contraseña
+                    <input type="password" id="input-password">
+                </label>
+              
+                <button id="boton-enviar" class="btn-enviar" type="button">Enviar</button>
+                <button id="boton-enviar-nuevos-datos" class="btn-enviar ocultar" type="button">Enviar nuevos Datos</button>
+            </form>
+
+            <div id="contenedor-sesion-iniciada" class="ocultar">
+                <button class="ocultar" id="btn-cambiar-datos">Cambiar mis datos</button>
+                <button class="ocultar" id="btn-cerrar-sesion">Cerrar Sesion</button>
+            </div>
+        </section>
+        
+    </main>
+
+
+    <script src="index.js"></script>
+</body>
+</html>

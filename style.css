@@ -1,0 +1,17 @@
+
+.formulario{
+    background-color: rgb(192, 243, 226);
+    height: 100px;
+    width: 200px;
+    flex-direction: column;
+    padding: 30px;
+    margin: 10px; 
+}
+
+.ocultar{
+    display: none;
+}
+
+.btn-enviar{
+    margin: 3px;
+}
