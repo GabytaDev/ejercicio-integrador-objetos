@@ -45,31 +45,17 @@ const usuario = {
 /***** FUNCIONES AUXILIARES ******/
 
 const modificarNombreDeUsuario = (usuario, nuevoNombre) => {
-
-    return usuario.nombreUsuario = nuevoNombre
+    usuario.nombreUsuario = nuevoNombre
+    return usuario
 }
 
 
 /*convierto el objeto usuario a JSON , retorna el objeto convertido a JSON.*/
+
 const convertirAJSON = (usuario) => {
-    let objetoJSON = JSON.stringify(usuario)
-    return objetoJSON
+    let objetoConvertidoAJSON = JSON.stringify(usuario)
+    return objetoConvertidoAJSON
 }
-
-const usuarioConvertidoaJSON = convertirAJSON(usuario) //lo guardo en una variable
-console.log(usuarioConvertidoaJSON)
-
-// guardo la info en local storage
-localStorage.setItem('usuario', usuarioConvertidoaJSON)//guardo el usuario
-
-// obtengo info de local storage
-const infoGuardada = localStorage.getItem('usuario')//obtengo desde localStorage
-console.log(infoGuardada)
-
-// convertir de JSON a Javascript los datos del usuario
-const infoGuardadaEnJS = JSON.parse(infoGuardada)
-console.log(infoGuardadaEnJS)
-
 
 /* tomo la cadena JSON y la convierto en objeto de JS*/
 const convertirDesdeJSON = (json) => {
@@ -77,18 +63,18 @@ const convertirDesdeJSON = (json) => {
     return JSONconvertidoaObjeto //retorna un nuevo Objeto de javascript
 }
 
-const guardarEnLocalStorage = (objetoDejs,clave) => {
-    let objetoConvertido = convertirAJSON(objetoDejs)
-    localStorage.setItem(clave, objetoConvertido) //se usa para guardar la sesion
+const guardarEnLocalStorage = (objeto,clave) => {
+    let objetoJSON = convertirAJSON(objeto) 
+    localStorage.setItem(clave, objetoJSON) //se usa para guardar la sesion
 }
 
 /*recibe como parámetro un string clave y retorna un objeto de Javascript con los
 // datos guardados bajo esa clave en localStorage.*/
 
 const obtenerDesdeLocalStorage = (clave) => {
-    const json = localStorage.getItem(clave)
-    const objeto = convertirDesdeJSON(json)
-    return objeto 
+    const datosLocalStorage = localStorage.getItem(clave)
+    const nuevoObjetoJS = convertirDesdeJSON(datosLocalStorage)
+    return nuevoObjetoJS
 }
 
 /**** CODIGO DE LA APLICACION ****/
@@ -97,8 +83,8 @@ botonIniciarSesion.onclick = () => {
     formulario.classList.remove("ocultar")
 }
 
-const sesionEstaIniciadaLocalS = obtenerDesdeLocalStorage("sesion")
-const nombreUsuarioLocalS = obtenerDesdeLocalStorage("usuario")
+// const sesionEstaIniciadaLocalS = obtenerDesdeLocalStorage("sesion")
+// const nombreUsuarioLocalS = obtenerDesdeLocalStorage("usuario")
 
 btnEnviarForm.onclick = () => {
     if (inputUser.value === usuario.nombreUsuario && inputPassword.value === usuario.contrasenia) { 
@@ -109,11 +95,11 @@ btnEnviarForm.onclick = () => {
         formulario.classList.add("ocultar")
         contenedorSesionIniciada.classList.remove("ocultar")
         guardarEnLocalStorage ({sesionIniciada:true}, "sesion")//funciona!!
+        guardarEnLocalStorage(usuario, "Usuario")
         titulo.textContent = `Hola, ${usuario.nombreUsuario}!!` //debe tomar el nombre desde el localStorage
     }else{
         alert("ingresaste datos erroneos")
     }
-
 
 }
 /*Si el usuario hace click en "cerrar sesión", el titulo debe volver a decir "Hola!" y el botón 
@@ -125,7 +111,7 @@ btnCerrarSesion.onclick = () => {
     botonIniciarSesion.classList.remove("ocultar")
     contenedorSesionIniciada.classList.add("ocultar")
     guardarEnLocalStorage({sesionIniciada: false }, "sesion")//funciona!!
-   
+    guardarEnLocalStorage(usuario, "Usuario")
 } 
 
 /*Si el usuario hace click en "Cambiar mis datos", se abre un formulario con un campo usuario y otro 
@@ -135,11 +121,14 @@ btnCambiarDatos.onclick = ()=> {
     formulario.classList.remove("ocultar")
     btnEnviarNuevosDatos.classList.remove("ocultar")
     btnEnviarForm.classList.add("ocultar")
+
 }
 
 btnEnviarNuevosDatos.onclick = () => {
     usuario.nombreUsuario = inputUser.value
     usuario.contrasenia = inputPassword.value
+    guardarEnLocalStorage({sesionIniciada: true }, "sesion")//funciona!!
+    guardarEnLocalStorage(usuario, "Usuario")
     titulo.textContent = `Hola, ${usuario.nombreUsuario}!!` //Debe tomar el nombre del localStorage
 
 }
